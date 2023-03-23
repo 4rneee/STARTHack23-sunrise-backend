@@ -22,7 +22,7 @@ func ConnectDatabase() {
 	DB = database
 
 	AddMockUsers()
-    AddMockFriends()
+	AddMockFriends()
 	AddMockStreams()
 }
 
@@ -48,7 +48,7 @@ func AddMockUsers() {
 
 func AddMockStreams() {
 	mockStreams := []Stream{
-		{ID: 1, Name: "Fleury Vegas - Golden Knights", Description: "Stanley Cup Final", Thumbnail: "https://cdn.britannica.com/50/219150-050-0032E44D/Marc-Andre-Fleury-Vegas-Golden-Knights-Stanley-Cup-Final-2018.jpg"},
+		{ID: 1, Name: "Washington Capitals - Vegas Golden Knights", Description: "Stanley Cup Final", Thumbnail: "https://cdn.britannica.com/50/219150-050-0032E44D/Marc-Andre-Fleury-Vegas-Golden-Knights-Stanley-Cup-Final-2018.jpg"},
 		{ID: 2, Name: "Bears - Bulls", Description: "Deutsche Bundesliga", Thumbnail: "https://www.scb.ch/fileadmin/_processed_/3/f/csm_SIM13266__DSC8739_Fotocredit_Tom_HILLER_2023-lpr_cc7d931c90.jpg"},
 		{ID: 3, Name: "Belgien - Schweiz", Description: "U18 EM", Thumbnail: "https://phothockey.ch/wp-content/uploads/2023/02/IMG_5320-392x272.jpg"},
 		{ID: 4, Name: "PSU - CCM", Description: "Bundescup - Rückspiel", Thumbnail: "https://static.wixstatic.com/media/725be2_4e93b8d0075446879b2985dcb155f770~mv2.jpg/v1/fill/w_1960,h_908,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/725be2_4e93b8d0075446879b2985dcb155f770~mv2.jpg"},
@@ -84,3 +84,31 @@ func AddMockFriends() {
 	DB.Exec("INSERT INTO friends VALUES (4, 5)")
 	DB.Exec("INSERT INTO friends VALUES (5, 4)")
 }
+
+func AddMockPolls() {
+	mockPolls := []Poll{
+		{Question: "Who will win?", StreamID: 1},
+		{Question: "How many goals will be scored in the first half?", StreamID: 1},
+		{Question: "Which team will score the next goal?", StreamID: 2},
+	}
+
+	mockPollAnswers := []PollAnswer{
+        {PollID: 0, Answer: "Washington Capitals", Votes: 645},
+        {PollID: 0, Answer: "Vegas Golden Knights", Votes: 559},
+        {PollID: 1, Answer: "0", Votes: 31},
+        {PollID: 1, Answer: "1", Votes: 55},
+        {PollID: 1, Answer: "2", Votes: 79},
+        {PollID: 1, Answer: "3", Votes: 75},
+        {PollID: 1, Answer: "4", Votes: 33},
+        {PollID: 1, Answer: "5 or more", Votes: 24},
+    }
+
+    for _, poll := range mockPolls {
+        DB.Create(&poll)
+    }
+
+    for _, pollAnswer := range mockPollAnswers {
+        DB.Create(&pollAnswer)
+    }
+}
+
