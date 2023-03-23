@@ -1,112 +1,107 @@
 package controllers
 
 import (
-	"net/http"
-    "fmt"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-type user struct {
-    email string
-    password string
-    name string
+type User struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
 type loginUser struct {
-    email string
-    password string
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type userID struct {
-    userId uint
+	UserId uint `json:"userid" binding:"required"`
 }
 
 type userKarma struct {
-    points uint
-    message string
+	Points  uint   `json:"points" binding:"required"`
+	Message string `json:"message" binding:"required"`
 }
 
 type friendship struct {
-    user1 uint
-    user2 uint
+	User1 uint `json:"user1" binding:"required"`
+	User2 uint `json:"user2" binding:"required"`
 }
 
 type friend struct {
-    name string
-    viewId uint
+	Name   string `json:"name" binding:"required"`
+	ViewId uint   `json:"viewid" binding:"required"`
 }
 
-type onlineFriends struct{
-    friends []friend
+type onlineFriends struct {
+	Friends []friend `json:"friends" binding:"required"`
 }
 
+func AddNewUser(c *gin.Context) {
+	var newUser User
 
-func AddNewUser(c *gin.Context){
-    var newUser user
-    
-    if err:=c.BindJSON(&newUser); err != nil {
-        fmt.Println(err) 
-        return 
-    }
+	if err := c.ShouldBindJSON(&newUser); err != nil {
+		fmt.Println(err)
+		return
+	}
 
-    //TODO: get new user id
-    user := userID{}
+	//TODO: get new user id
+	user := userID{}
 
-    //TODO: add user to data base
+	//TODO: add user to data base
 
-
-    c.IndentedJSON(http.StatusCreated, user)
+	c.IndentedJSON(http.StatusCreated, user)
 }
 
-func LoginUser(c *gin.Context){
-    var newUser loginUser
+func LoginUser(c *gin.Context) {
+	var newUser loginUser
 
-    if err:=c.BindJSON(&newUser); err != nil {
-        fmt.Println(err) 
-        c.Status(http.StatusBadRequest)
-        return
-    }
+	if err := c.ShouldBindJSON(&newUser); err != nil {
+		fmt.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
 
-    //TODO: Check if user credentials are stored and get userId
-    //check
-    userId := userID{userId:0}
+	//TODO: Check if user credentials are stored and get userId
+	//check
+	userId := userID{UserId: 0}
 
-    c.IndentedJSON(http.StatusOK, userId)  
+	c.IndentedJSON(http.StatusOK, userId)
 }
 
-
-func GetUserKarma(c *gin.Context){
-    //TODO: get user karma and possible services
-    uKarma := userKarma{}
-    c.IndentedJSON(http.StatusOK, uKarma)
+func GetUserKarma(c *gin.Context) {
+	//TODO: get user karma and possible services
+	uKarma := userKarma{}
+	c.IndentedJSON(http.StatusOK, uKarma)
 }
 
-func AddNewFriendship(c *gin.Context){
-    var newFriendship friendship
+func AddNewFriendship(c *gin.Context) {
+	var newFriendship friendship
 
-    if err:=c.BindJSON(&newFriendship); err != nil {
-        fmt.Println(err) 
-        c.Status(http.StatusBadRequest)
-        return
-    }
+	if err := c.ShouldBindJSON(&newFriendship); err != nil {
+		fmt.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
 
-    //TODO: save friendship
+	//TODO: save friendship
 
-    c.Status(http.StatusOK)
+	c.Status(http.StatusOK)
 }
 
-func GetActiveFriends(c *gin.Context){
-    var userId userID
+func GetActiveFriends(c *gin.Context) {
+	var userId userID
 
-    if err:=c.BindJSON(&userId); err != nil {
-        fmt.Println(err) 
-        c.Status(http.StatusBadRequest)
-        return
-    }
+	if err := c.ShouldBindJSON(&userId); err != nil {
+		fmt.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
 
-    //TODO: search for active active friends 
-    friends := make([]friend, 0)
-    c.IndentedJSON(http.StatusOK, onlineFriends{friends:friends})
+	//TODO: search for active active friends
+	friends := make([]friend, 0)
+	c.IndentedJSON(http.StatusOK, onlineFriends{Friends: friends})
 }
-
-
