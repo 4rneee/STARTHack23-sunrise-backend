@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/4rneee/STARTHack23-sunrise-backend/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,8 +23,13 @@ func PutClip(c *gin.Context){
         return
     }
 
-    //TODO: Save clip to db
+    err := models.DB.Create(&models.Clip{URL: newClip.URL, UserID: newClip.UserID, Description: newClip.Description})
 
+    if err != nil {
+        log.Println(err)
+        c.Status(http.StatusInternalServerError)
+        return
+    }
     c.Status(http.StatusOK)
 }
 
