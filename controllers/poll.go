@@ -26,7 +26,7 @@ type RequestPoll struct {
 
 type Answer struct {
 	AnsID  uint   `json:"id"`
-	answer string `json:"choice"`
+	Answer string `json:"choice"`
 	Votes  uint   `json:"votes"`
 }
 type Poll struct {
@@ -136,7 +136,7 @@ func GetPolls(c *gin.Context) {
 
 		answers := make([]Answer, 0, len(answerModels))
 		for _, ans := range answerModels {
-			answers = append(answers, Answer{AnsID: ans.ID, answer: ans.Answer, Votes: ans.Votes})
+			answers = append(answers, Answer{AnsID: ans.ID, Answer: ans.Answer, Votes: ans.Votes})
 		}
 		fullPolls = append(fullPolls, Poll{PollID: poll.ID, Question: poll.Question, Answers: answers})
 	}
