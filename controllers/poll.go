@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+    "time"
 
 	"github.com/4rneee/STARTHack23-sunrise-backend/models"
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,7 @@ type Poll struct {
 	Question string   `json:"question" binding:"required"`
 	Answers  []string `json:"answers" binding:"required"`
 	AnsIDs   []uint   `json:"ansids" binding:"required"`
+	Votes    []uint   `json:"votes" binding:"required"`
 }
 
 type StreamPolls struct {
@@ -48,13 +50,15 @@ func CreatePoll(c *gin.Context) {
 	err := models.DB.Create(&poll).Error
 	if err != nil {
 		c.Status(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
 	for _, answer := range newPoll.Answers {
-		err = models.DB.Create(models.PollAnswer{Votes: 0, Answer: answer, PollID: poll.ID}).Error
+		err = models.DB.Create(&models.PollAnswer{Votes: 0, Answer: answer, PollID: poll.ID}).Error
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
+			log.Println(err)
 			return
 		}
 	}
@@ -72,18 +76,20 @@ func PutVote(c *gin.Context) {
 	}
 
 	// Increment Answer of given Answer id of given Poll id
-    var answer models.PollAnswer
-    err := models.DB.First(&answer, newVote.AnsID).Error
+	var answer models.PollAnswer
+	err := models.DB.First(&answer, newVote.AnsID).Error
 	if err != nil {
 		c.Status(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
-    answer.Votes += 1
+	answer.Votes += 1
 
-    err = models.DB.Save(&answer).Error
+	err = models.DB.Save(&answer).Error
 	if err != nil {
 		c.Status(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
@@ -98,35 +104,44 @@ func GetPolls(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+    parsedTime, err := time.Parse(time.RFC3339Nano, reqPoll.LastPull)
+    if err != nil {
+        c.Status(http.StatusBadRequest)
+        log.Println(err)
+        return
+    }
 
-	//TODO: Get all new or updated Polls since last pull
-    var polls []models.Poll
-    err := models.DB.Where("streamid = ?", reqPoll.StreamID).Find(&polls).Error
+	// Get all new or updated Polls since last pull
+	var polls []models.Poll
+	err = models.DB.Where("stream_iD = ?", reqPoll.StreamID).Where("updated_at > ?", parsedTime).Find(&polls).Error
 	if err != nil {
 		c.Status(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
-    var fullPolls []Poll
-    for _, poll := range polls {
-        var answerModels []models.PollAnswer
-        err := models.DB.Where("pollID = ?",poll.ID).Find(&answerModels).Error
-        if err != nil {
-            c.Status(http.StatusInternalServerError)
-            return
-        }
+	var fullPolls []Poll
+	for _, poll := range polls {
+		var answerModels []models.PollAnswer
+		err := models.DB.Where("poll_iD = ?", poll.ID).Find(&answerModels).Error
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
 
-        answers := make([]string, 0)
-        ansids := make([]uint, 0)
-        for _, ans := range answerModels {
-            answers = append(answers, ans.Answer)
-            ansids = append(ansids, ans.ID)
-        }
-        fullPolls = append(fullPolls, Poll{PollID:poll.ID, Question:poll.Question, Answers:answers, AnsIDs: ansids})
-    }
+		answers := make([]string, 0)
+		ansids := make([]uint, 0)
+		votes := make([]uint, 0)
+		for _, ans := range answerModels {
+			answers = append(answers, ans.Answer)
+			ansids = append(ansids, ans.ID)
+			votes = append(votes, ans.Votes)
+		}
+        fullPolls = append(fullPolls, Poll{PollID: poll.ID, Question: poll.Question, Answers: answers, AnsIDs: ansids, Votes:votes})
+	}
 
-
-    resultPolls := StreamPolls{Polls:fullPolls}
+	resultPolls := StreamPolls{Polls: fullPolls}
 
 	c.IndentedJSON(http.StatusOK, resultPolls)
 

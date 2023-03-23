@@ -21,6 +21,7 @@ func main() {
     router.PUT("getPolls/", controllers.GetPolls)
 
     router.GET("getStreams/", controllers.GetAllStreams)
+    router.PUT("addStream/", controllers.AddStream)
 
     router.PUT("putComment/", controllers.PutComment)
     router.PUT("getComments/", controllers.GetComments)

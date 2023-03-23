@@ -14,5 +14,5 @@ type PollAnswer struct {
 	Votes  uint `json:"votes"`
 	PollID uint `json:"pollID"`
 	Poll   Poll
-    Answer string `json:"answer"`
+	Answer string `json:"answer"`
 }
