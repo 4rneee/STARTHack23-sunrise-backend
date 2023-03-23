@@ -16,5 +16,8 @@ func main() {
     router.PUT("addFriendship/", controllers.AddNewFriendship)
     router.GET("getFriends/", controllers.GetActiveFriends)
 
+    router.PUT("addPoll/", controllers.CreatePoll)
+    router.PUT("putVote/", controllers.PutVote)
+
     router.Run("localhost:8080")
 }

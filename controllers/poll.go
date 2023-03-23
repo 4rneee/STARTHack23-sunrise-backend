@@ -18,7 +18,7 @@ type Vote struct {
 	AnsID  uint `json:"ansid" binding:"required"`
 }
 
-func createPoll(c *gin.Context){
+func CreatePoll(c *gin.Context){
     var newPoll Poll
 
     if err := c.ShouldBindJSON(&newPoll); err != nil{
@@ -32,7 +32,7 @@ func createPoll(c *gin.Context){
     c.Status(http.StatusOK)
 }
 
-func putVote(c *gin.Context){
+func PutVote(c *gin.Context){
     var newVote Poll
 
     if err := c.ShouldBindJSON(&newVote); err != nil{
