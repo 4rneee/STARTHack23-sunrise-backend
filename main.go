@@ -12,6 +12,7 @@ func main() {
     router := gin.Default()
     router.PUT("register/", controllers.AddNewUser) 
     router.POST("login/", controllers.LoginUser)
+    router.GET("getUserData/", controllers.GetUserData)
 
     router.PUT("addFriendship/", controllers.AddNewFriendship)
     router.GET("getFriends/", controllers.GetActiveFriends)

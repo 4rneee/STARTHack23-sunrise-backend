@@ -27,9 +27,10 @@ type userID struct {
 	UserId uint `json:"userid" binding:"required"`
 }
 
-type userKarma struct {
+type UserData struct {
 	Points  uint   `json:"points" binding:"required"`
-	Message string `json:"message" binding:"required"`
+	Name string `json:"name" binding:"required"`
+	Email string `json:"email" binding:"required"`
 }
 
 type friendship struct {
@@ -144,10 +145,30 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"id": inDB.ID})
 }
 
-func GetUserKarma(c *gin.Context) {
-	//TODO: get user karma and possible services
-	uKarma := userKarma{}
-	c.IndentedJSON(http.StatusOK, uKarma)
+func GetUserData(c *gin.Context) {
+    id_s, ok := c.GetQuery("id")
+
+	if !ok {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(id_s)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+    var user models.User
+    err = models.DB.Model(&models.User{}).Where("id = ?", id).Find(&user).Error
+    if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+    c.IndentedJSON(http.StatusOK, UserData{Points:user.Points, Name:user.Name, Email:user.Email})
 }
 
 func AddNewFriendship(c *gin.Context) {
