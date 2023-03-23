@@ -24,6 +24,8 @@ func ConnectDatabase() {
 	AddMockUsers()
 	AddMockFriends()
 	AddMockStreams()
+    AddMockPolls()
+    AddMockComments()
 }
 
 func pw(password string) []byte {
@@ -53,7 +55,7 @@ func AddMockStreams() {
 		{ID: 3, Name: "Belgien - Schweiz", Description: "U18 EM", Thumbnail: "https://phothockey.ch/wp-content/uploads/2023/02/IMG_5320-392x272.jpg"},
 		{ID: 4, Name: "PSU - CCM", Description: "Bundescup - Rückspiel", Thumbnail: "https://static.wixstatic.com/media/725be2_4e93b8d0075446879b2985dcb155f770~mv2.jpg/v1/fill/w_1960,h_908,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/725be2_4e93b8d0075446879b2985dcb155f770~mv2.jpg"},
 		{ID: 5, Name: "The blue promise", Description: "Documentation on a historic woner", Thumbnail: "https://www.evz.ch/typo3temp/assets/_processed_/4/d/csm_ff813cd10cbaa0943b4182ad4f591edd23f65050-fp-600-460-8-42_4144586341.jpg"},
-		{ID: 6, Name: "Kanada - Russland", Description: "WM recap", Thumbnail: "https://image.stern.de/31606106/t/rR/v2/w1440/r1/-/eishockey-kanada-russland.jpg"},
+		{ID: 6, Name: "Canada - Russia", Description: "World Cup recap", Thumbnail: "https://image.stern.de/31606106/t/rR/v2/w1440/r1/-/eishockey-kanada-russland.jpg"},
 		{ID: 7, Name: "Season recap", Description: "NHL Cup 2022 recap", Thumbnail: "https://www.hockeyweb.de/index.php?rex_media_type=hw_article_image&rex_media_file=120820102.jpg"},
 	}
 
@@ -112,3 +114,18 @@ func AddMockPolls() {
     }
 }
 
+func AddMockComments() {
+    mockComments := []Comment{
+        {Content: "LETS GO VEGAS!!", StreamID: 1, UserID: 4},
+        {Content: "This game is sooo exciting. I hope Washington wins.", StreamID: 1, UserID: 6},
+        {Content: "Hi", StreamID: 1, UserID: 5},
+        {Content: "Greetings from Zurich", StreamID: 1, UserID: 2},
+        {Content: "Watching this while cooking", StreamID: 2, UserID: 3},
+        {Content: "Hi", StreamID: 4, UserID: 5},
+        {Content: "🎉🎉🎉", StreamID: 2, UserID: 4},
+    }
+
+    for _, comment := range mockComments {
+        DB.Create(&comment)
+    }
+}
