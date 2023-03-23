@@ -20,6 +20,9 @@ func ConnectDatabase() {
 	database.AutoMigrate(&User{}, &Poll{}, &PollAnswer{}, &Stream{}, &Comment{}, &Clip{})
 
 	DB = database
+
+    AddMockUsers()
+    AddMockStreams()
 }
 
 func pw(password string) []byte {
