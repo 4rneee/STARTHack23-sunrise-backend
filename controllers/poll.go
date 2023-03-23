@@ -25,8 +25,8 @@ type RequestPoll struct {
 }
 
 type Answer struct {
-	AnsID  uint   `json:"ansid"`
-	answer string `json:"answer"`
+	AnsID  uint   `json:"id"`
+	answer string `json:"choice"`
 	Votes  uint   `json:"votes"`
 }
 type Poll struct {
