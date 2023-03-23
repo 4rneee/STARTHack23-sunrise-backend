@@ -94,7 +94,7 @@ func GetLatestMesseges(c *gin.Context) {
 	}
 
     var comments[]CommentResult
-    err = models.DB.Raw("SELECT u.name, c.content, c.updated_at FROM comments c, user u WHERE c.stream_id = ? AND c.user_id = u.id ORDER BY c.updated_at DESC LIMIT 25", id).Scan(&comments).Error
+    err = models.DB.Raw("SELECT u.name, c.content, c.updated_at FROM comments c, users u WHERE c.stream_id = ? AND c.user_id = u.id ORDER BY c.updated_at DESC LIMIT 25", id).Scan(&comments).Error
 	if err != nil {
 		log.Println(err)
 		c.Status(http.StatusInternalServerError)
