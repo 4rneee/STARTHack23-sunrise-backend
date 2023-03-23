@@ -4,7 +4,6 @@ import "github.com/jinzhu/gorm"
 
 type Poll struct {
 	gorm.Model
-	ID       uint   `json:"id" gorm:"primary_key"`
 	Question string `json:"question"`
 	StreamID uint   `json:"streamid"`
 	Stream   Stream
