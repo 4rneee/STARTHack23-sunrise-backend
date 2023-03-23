@@ -24,8 +24,8 @@ func ConnectDatabase() {
 	AddMockUsers()
 	AddMockFriends()
 	AddMockStreams()
-    AddMockPolls()
-    AddMockComments()
+	AddMockPolls()
+	AddMockComments()
 }
 
 func pw(password string) []byte {
@@ -41,6 +41,29 @@ func AddMockUsers() {
 		{ID: 4, Name: "Harry", Email: "H@Z.com", Points: 85, Password: pw("harry"), StreamID: 1},
 		{ID: 5, Name: "Peyman", Email: "P@E.com", Points: 90, Password: pw("pucpm"), StreamID: 3},
 		{ID: 6, Name: "Karola", Email: "K@k.com", Points: 0, Password: pw("k"), StreamID: 1},
+		{ID: 7, Name: "Alice", Email: "alice@example.com", Points: 50, Password: pw("alice"), StreamID: 2},
+		{ID: 8, Name: "Bob", Email: "bob@example.com", Points: 30, Password: pw("bob"), StreamID: 1},
+		{ID: 9, Name: "Charlie", Email: "charlie@example.com", Points: 80, Password: pw("charlie"), StreamID: 3},
+		{ID: 10, Name: "Dave", Email: "dave@example.com", Points: 20, Password: pw("dave"), StreamID: 1},
+		{ID: 11, Name: "Eve", Email: "eve@example.com", Points: 100, Password: pw("eve"), StreamID: 2},
+		{ID: 12, Name: "Frank", Email: "frank@example.com", Points: 75, Password: pw("frank"), StreamID: 1},
+		{ID: 13, Name: "Grace", Email: "grace@example.com", Points: 65, Password: pw("grace"), StreamID: 3},
+		{ID: 14, Name: "Heidi", Email: "heidi@example.com", Points: 90, Password: pw("heidi"), StreamID: 1},
+		{ID: 15, Name: "Isaac", Email: "isaac@example.com", Points: 55, Password: pw("isaac"), StreamID: 2},
+		{ID: 16, Name: "Jasmine Smith", Email: "jasmine.smith@example.com", Points: 100, Password: pw("password16"), StreamID: 2},
+		{ID: 17, Name: "Daniel Johnson", Email: "daniel.johnson@example.com", Points: 50, Password: pw("password17"), StreamID: 3},
+		{ID: 18, Name: "Emily Wilson", Email: "emily.wilson@example.com", Points: 20, Password: pw("password18"), StreamID: 1},
+		{ID: 19, Name: "Ethan Brown", Email: "ethan.brown@example.com", Points: 75, Password: pw("password19"), StreamID: 2},
+		{ID: 20, Name: "Olivia Davis", Email: "olivia.davis@example.com", Points: 30, Password: pw("password20"), StreamID: 3},
+		{ID: 21, Name: "Sophia Rodriguez", Email: "sophia.rodriguez@example.com", Points: 85, Password: pw("password21"), StreamID: 1},
+		{ID: 22, Name: "Sophie Thompson", Email: "sophie.thompson@example.com", Points: 120, Password: pw("password22"), StreamID: 2},
+		{ID: 23, Name: "Thomas Parker", Email: "thomas.parker@example.com", Points: 85, Password: pw("password23"), StreamID: 3},
+		{ID: 24, Name: "Ella Mitchell", Email: "ella.mitchell@example.com", Points: 50, Password: pw("password24"), StreamID: 1},
+		{ID: 25, Name: "Christopher Turner", Email: "christopher.turner@example.com", Points: 10, Password: pw("password25"), StreamID: 2},
+		{ID: 26, Name: "Ava Roberts", Email: "ava.roberts@example.com", Points: 70, Password: pw("password26"), StreamID: 3},
+		{ID: 27, Name: "Jacob Campbell", Email: "jacob.campbell@example.com", Points: 55, Password: pw("password27"), StreamID: 1},
+		{ID: 28, Name: "Grace Phillips", Email: "grace.phillips@example.com", Points: 30, Password: pw("password28"), StreamID: 2},
+		{ID: 29, Name: "Andrew Anderson", Email: "andrew.anderson@example.com", Points: 65, Password: pw("password29"), StreamID: 3},
 	}
 
 	for _, user := range mockUsers {
@@ -95,37 +118,37 @@ func AddMockPolls() {
 	}
 
 	mockPollAnswers := []PollAnswer{
-        {PollID: 0, Answer: "Washington Capitals", Votes: 645},
-        {PollID: 0, Answer: "Vegas Golden Knights", Votes: 559},
-        {PollID: 1, Answer: "0", Votes: 31},
-        {PollID: 1, Answer: "1", Votes: 55},
-        {PollID: 1, Answer: "2", Votes: 79},
-        {PollID: 1, Answer: "3", Votes: 75},
-        {PollID: 1, Answer: "4", Votes: 33},
-        {PollID: 1, Answer: "5 or more", Votes: 24},
-    }
+		{PollID: 0, Answer: "Washington Capitals", Votes: 645},
+		{PollID: 0, Answer: "Vegas Golden Knights", Votes: 559},
+		{PollID: 1, Answer: "0", Votes: 31},
+		{PollID: 1, Answer: "1", Votes: 55},
+		{PollID: 1, Answer: "2", Votes: 79},
+		{PollID: 1, Answer: "3", Votes: 75},
+		{PollID: 1, Answer: "4", Votes: 33},
+		{PollID: 1, Answer: "5 or more", Votes: 24},
+	}
 
-    for _, poll := range mockPolls {
-        DB.Create(&poll)
-    }
+	for _, poll := range mockPolls {
+		DB.Create(&poll)
+	}
 
-    for _, pollAnswer := range mockPollAnswers {
-        DB.Create(&pollAnswer)
-    }
+	for _, pollAnswer := range mockPollAnswers {
+		DB.Create(&pollAnswer)
+	}
 }
 
 func AddMockComments() {
-    mockComments := []Comment{
-        {Content: "LETS GO VEGAS!!", StreamID: 1, UserID: 4},
-        {Content: "This game is sooo exciting. I hope Washington wins.", StreamID: 1, UserID: 6},
-        {Content: "Hi", StreamID: 1, UserID: 5},
-        {Content: "Greetings from Zurich", StreamID: 1, UserID: 2},
-        {Content: "Watching this while cooking", StreamID: 2, UserID: 3},
-        {Content: "Hi", StreamID: 4, UserID: 5},
-        {Content: "🎉🎉🎉", StreamID: 2, UserID: 4},
-    }
+	mockComments := []Comment{
+		{Content: "LETS GO VEGAS!!", StreamID: 1, UserID: 4},
+		{Content: "This game is sooo exciting. I hope Washington wins.", StreamID: 1, UserID: 6},
+		{Content: "Hi", StreamID: 1, UserID: 5},
+		{Content: "Greetings from Zurich", StreamID: 1, UserID: 2},
+		{Content: "Watching this while cooking", StreamID: 2, UserID: 3},
+		{Content: "Hi", StreamID: 4, UserID: 5},
+		{Content: "🎉🎉🎉", StreamID: 2, UserID: 4},
+	}
 
-    for _, comment := range mockComments {
-        DB.Create(&comment)
-    }
+	for _, comment := range mockComments {
+		DB.Create(&comment)
+	}
 }
