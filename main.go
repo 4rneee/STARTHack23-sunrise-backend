@@ -23,5 +23,7 @@ func main() {
 
     router.PUT("putComment/", controllers.PutComment)
 
+    router.PUT("putClip/", controllers.PutClip)
+
     router.Run("localhost:8080")
 }

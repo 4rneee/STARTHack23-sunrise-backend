@@ -5,4 +5,5 @@ type Clip struct {
 	URL    string `json:"url"`
 	UserID uint
 	User   User
+    Description string 
 }
