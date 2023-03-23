@@ -55,7 +55,7 @@ func GetComments(c *gin.Context) {
 		return
 	}
 
-	parsedTime, err := time.Parse(time.RFC3339Nano, reqComment.LastPull)
+	parsedTime, err := time.Parse(time.RFC3339, reqComment.LastPull)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		log.Println(err)

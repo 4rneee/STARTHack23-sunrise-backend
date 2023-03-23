@@ -107,7 +107,7 @@ func GetPolls(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	parsedTime, err := time.Parse(time.RFC3339Nano, reqPoll.LastPull)
+	parsedTime, err := time.Parse(time.RFC3339, reqPoll.LastPull)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		log.Println(err)
