@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/4rneee/STARTHack23-sunrise-backend/models"
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,9 @@ type RequestComment struct {
 	StreamID uint   `json:"streamid" binding:"required"`
 }
 
-type CommentBatch struct {
-	Names    []string `json:"names" binding:"required"`
-	Comments []string `json:"comments" binding:"required"`
+type CommentResult struct {
+	Name    string `json:"name" binding:"required"`
+	Content string `json:"comment" binding:"required"`
 }
 
 func PutComment(c *gin.Context) {
@@ -34,13 +35,12 @@ func PutComment(c *gin.Context) {
 	}
 
 	// Add comment to Buffer / DB
-    err := models.DB.Create(&models.Comment{Content:newComment.Content, UserID:newComment.UserID, StreamID:newComment.StreamID}).Error
-    if err != nil {
+	err := models.DB.Create(&models.Comment{Content: newComment.Content, UserID: newComment.UserID, StreamID: newComment.StreamID}).Error
+	if err != nil {
 		log.Println(err)
 		c.Status(http.StatusInternalServerError)
 		return
 	}
-
 
 	c.Status(http.StatusOK)
 }
@@ -54,10 +54,21 @@ func GetComments(c *gin.Context) {
 		return
 	}
 
-	//TODO: Get all comments since last pull from stream
+	parsedTime, err := time.Parse(time.RFC3339Nano, reqComment.LastPull)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 
-	//TODO: Get name of user from user id
-    
-    var batch CommentBatch
-    c.IndentedJSON(http.StatusOK, batch)
+	var comments []CommentResult
+	err = models.DB.Raw("SELECT u.name, c.content FROM comments c, users u WHERE c.stream_id = ? AND c.user_id = u.id AND c.updated_at > ?", reqComment.StreamID, parsedTime).
+		Scan(&comments).Error
+    if err != nil {
+        log.Println(err)
+        c.Status(http.StatusInternalServerError)
+        return
+    }
+
+	c.JSON(http.StatusOK, comments)
 }
