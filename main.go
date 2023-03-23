@@ -18,8 +18,14 @@ func main() {
 
     router.PUT("addPoll/", controllers.CreatePoll)
     router.PUT("putVote/", controllers.PutVote)
+    router.PUT("getPolls/", controllers.GetPolls)
 
     router.GET("getStreams/", controllers.GetAllStreams)
+
+    router.PUT("putComment/", controllers.PutComment)
+    router.PUT("getComments/", controllers.GetComments)
+
+    router.PUT("putClip/", controllers.PutClip)
 
     router.Run("localhost:8080")
 }
