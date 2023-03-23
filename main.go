@@ -1,11 +1,14 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-    "github.com/4rneee/STARTHack23-sunrise-backend/controllers"
+	"github.com/4rneee/STARTHack23-sunrise-backend/controllers"
+	"github.com/4rneee/STARTHack23-sunrise-backend/models"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+    models.ConnectDatabase()
+
     router := gin.Default()
     router.PUT("addUser/", controllers.AddNewUser) 
     router.GET("login/", controllers.LoginUser)
