@@ -1,0 +1,19 @@
+package models
+
+import "fmt"
+
+type User struct {
+	ID       uint   `json:"id" gorm:"primary_key"`
+	Name     string `json:"name"`
+	Email    string `json:"email" gorm:"unique"`
+	Password []byte `gorm:"type:BINARY(60)"`
+}
+
+func (u *User) String() string {
+	return fmt.Sprintf("{%v %v %v, %v}", u.ID, u.Name, u.Email, string(u.Password))
+}
+
+type Friends struct {
+	UID1 uint `json:"uID1"`
+	UID2 uint `json:"uID2"`
+}
