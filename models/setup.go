@@ -35,7 +35,7 @@ func pw(password string) []byte {
 
 func AddMockUsers() {
 	mockUsers := []User{
-		{ID: 1, Name: "Test User", Email: "T@t.com", Points: 210, Password: pw("123"), StreamID: 1},
+		{ID: 1, Name: "Test User", Email: "A", Points: 210, Password: pw("A"), StreamID: 1},
 		{ID: 2, Name: "Noah", Email: "noah@tum.de", Points: 0, Password: pw("noah"), StreamID: 3},
 		{ID: 3, Name: "Arne", Email: "A@F.com", Points: 0, Password: pw("123"), StreamID: 0},
 		{ID: 4, Name: "Harry", Email: "H@Z.com", Points: 85, Password: pw("harry"), StreamID: 1},
