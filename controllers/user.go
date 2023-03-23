@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"net/mail"
+	"strconv"
 	"strings"
 
 	"github.com/4rneee/STARTHack23-sunrise-backend/models"
@@ -37,8 +38,8 @@ type friendship struct {
 }
 
 type friend struct {
-	Name   string `json:"name" binding:"required"`
-	ViewId uint   `json:"viewid" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	StreamID uint   `json:"streamid" binding:"required"`
 }
 
 type onlineFriends struct {
@@ -126,21 +127,21 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-    var inDB models.User
-    err := models.DB.First(&inDB, "email = ?", input.Email).Error
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
-        log.Println(err.Error())
-        return
-    }
+	var inDB models.User
+	err := models.DB.First(&inDB, "email = ?", input.Email).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		log.Println(err.Error())
+		return
+	}
 
-    if err = bcrypt.CompareHashAndPassword(inDB.Password, []byte(input.Password)); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "wrong password"})
-        log.Println(err.Error())
-        return
-    }
+	if err = bcrypt.CompareHashAndPassword(inDB.Password, []byte(input.Password)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong password"})
+		log.Println(err.Error())
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"id": inDB.ID})
+	c.JSON(http.StatusOK, gin.H{"id": inDB.ID})
 }
 
 func GetUserKarma(c *gin.Context) {
@@ -158,21 +159,58 @@ func AddNewFriendship(c *gin.Context) {
 		return
 	}
 
-	//TODO: save friendship
+	var u1 models.User
+	if err := models.DB.First(&u1, newFriendship.User1).Error; err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user1 does not exist"})
+		return
+	}
+
+	var u2 models.User
+	if err := models.DB.First(&u2, newFriendship.User2).Error; err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user2 does not exist"})
+		return
+	}
+
+	if err := models.DB.Exec("INSERT INTO \"friends\" VALUES (?, ?);", newFriendship.User1, newFriendship.User2).Error; err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user2 is already a friend of user1"})
+		return
+	}
 
 	c.Status(http.StatusOK)
 }
 
 func GetActiveFriends(c *gin.Context) {
-	var userId userID
+	id_s, ok := c.GetQuery("id")
 
-	if err := c.ShouldBindJSON(&userId); err != nil {
+	if !ok {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(id_s)
+	if err != nil {
 		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	//TODO: search for active active friends
-	friends := make([]friend, 0)
-	c.IndentedJSON(http.StatusOK, onlineFriends{Friends: friends})
+	var friends []models.User
+	err = models.DB.Raw("SELECT fs.* FROM users u JOIN friends f ON u.id=f.user_id JOIN users fs ON fs.id=f.friend_id WHERE u.id = ? AND fs.stream_id > 0", id).Scan(&friends).Error
+
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	friends_ret := make([]friend, 0, len(friends))
+
+	for _, f := range friends {
+		friends_ret = append(friends_ret, friend{Name: f.Name, StreamID: f.StreamID})
+	}
+
+    c.JSON(http.StatusOK, friends_ret)
 }
