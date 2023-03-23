@@ -3,7 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
-    "time"
+	"time"
 
 	"github.com/4rneee/STARTHack23-sunrise-backend/models"
 	"github.com/gin-gonic/gin"
@@ -24,12 +24,15 @@ type RequestPoll struct {
 	LastPull string `json:"lastpull" binding:"required"`
 }
 
+type Answer struct {
+	AnsID  uint   `json:"ansid"`
+	answer string `json:"answer"`
+	Votes  uint   `json:"votes"`
+}
 type Poll struct {
 	PollID   uint     `json:"pollid" binding:"required"`
 	Question string   `json:"question" binding:"required"`
-	Answers  []string `json:"answers" binding:"required"`
-	AnsIDs   []uint   `json:"ansids" binding:"required"`
-	Votes    []uint   `json:"votes" binding:"required"`
+	Answers  []Answer `json:"answers"`
 }
 
 type StreamPolls struct {
@@ -104,12 +107,12 @@ func GetPolls(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-    parsedTime, err := time.Parse(time.RFC3339Nano, reqPoll.LastPull)
-    if err != nil {
-        c.Status(http.StatusBadRequest)
-        log.Println(err)
-        return
-    }
+	parsedTime, err := time.Parse(time.RFC3339Nano, reqPoll.LastPull)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 
 	// Get all new or updated Polls since last pull
 	var polls []models.Poll
@@ -120,29 +123,25 @@ func GetPolls(c *gin.Context) {
 		return
 	}
 
-	var fullPolls []Poll
+	var fullPolls []Poll = make([]Poll, 0, len(polls))
 	for _, poll := range polls {
 		var answerModels []models.PollAnswer
-		err := models.DB.Where("poll_iD = ?", poll.ID).Find(&answerModels).Error
+		err := models.DB.Where("poll_id = ?", poll.ID).Find(&answerModels).Error
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			log.Println(err)
 			return
 		}
+        log.Println(answerModels)
 
-		answers := make([]string, 0)
-		ansids := make([]uint, 0)
-		votes := make([]uint, 0)
+		answers := make([]Answer, 0, len(answerModels))
 		for _, ans := range answerModels {
-			answers = append(answers, ans.Answer)
-			ansids = append(ansids, ans.ID)
-			votes = append(votes, ans.Votes)
+			answers = append(answers, Answer{AnsID: ans.ID, answer: ans.Answer, Votes: ans.Votes})
 		}
-        fullPolls = append(fullPolls, Poll{PollID: poll.ID, Question: poll.Question, Answers: answers, AnsIDs: ansids, Votes:votes})
+		fullPolls = append(fullPolls, Poll{PollID: poll.ID, Question: poll.Question, Answers: answers})
 	}
 
-	resultPolls := StreamPolls{Polls: fullPolls}
 
-	c.IndentedJSON(http.StatusOK, resultPolls)
+	c.IndentedJSON(http.StatusOK, fullPolls)
 
 }
