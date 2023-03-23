@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/4rneee/STARTHack23-sunrise-backend/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,10 +16,10 @@ type Stream struct {
 
 
 func GetAllStreams(c *gin.Context){
-    //TODO: get all streams 
-    var streams []Stream
+    var streams []models.Stream
+    models.DB.Find(&streams)
 
-    c.IndentedJSON(http.StatusOK, streams)
+    c.JSON(http.StatusOK, streams)
 }
 
 

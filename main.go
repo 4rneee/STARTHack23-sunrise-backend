@@ -27,5 +27,5 @@ func main() {
 
     router.PUT("putClip/", controllers.PutClip)
 
-    router.Run("localhost:8080")
+    router.Run()
 }
