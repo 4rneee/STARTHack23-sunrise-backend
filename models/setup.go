@@ -17,7 +17,7 @@ func ConnectDatabase() {
 
 	database.LogMode(true)
 
-	database.AutoMigrate(&User{}, &Poll{}, &PollAnswer{}, &Stream{}, &Comment{}, &Clip{})
+	database.AutoMigrate(&User{}, &Poll{}, &PollAnswer{}, &Stream{}, &Comment{}, &Clip{}, &Tweet{})
 
 	DB = database
 

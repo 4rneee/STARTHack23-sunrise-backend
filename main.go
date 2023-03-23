@@ -28,5 +28,8 @@ func main() {
 
     router.PUT("putClip/", controllers.PutClip)
 
+    router.PUT("putTweet", controllers.PutTweet)
+    router.GET("getTweets", controllers.GetTweet)
+
     router.Run()
 }
