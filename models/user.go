@@ -7,7 +7,8 @@ type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email" gorm:"unique"`
 	Password []byte `gorm:"type:BINARY(60)"`
-    Points uint
+	Points   uint
+    ViewID uint 
 }
 
 func (u *User) String() string {
