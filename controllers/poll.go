@@ -142,6 +142,6 @@ func GetPolls(c *gin.Context) {
 	}
 
 
-	c.IndentedJSON(http.StatusOK, fullPolls)
+	c.IndentedJSON(http.StatusOK, fullPolls[0])
 
 }
