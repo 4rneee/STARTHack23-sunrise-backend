@@ -21,8 +21,9 @@ type RequestComment struct {
 }
 
 type CommentResult struct {
-	Name    string `json:"name" binding:"required"`
-	Content string `json:"comment" binding:"required"`
+	Name      string `json:"name" binding:"required"`
+	Content   string `json:"comment" binding:"required"`
+	UpdatedAt string `json:"timestamp" binding:"required"`
 }
 
 func PutComment(c *gin.Context) {
@@ -62,13 +63,13 @@ func GetComments(c *gin.Context) {
 	}
 
 	var comments []CommentResult
-	err = models.DB.Raw("SELECT u.name, c.content FROM comments c, users u WHERE c.stream_id = ? AND c.user_id = u.id AND c.updated_at > ?", reqComment.StreamID, parsedTime).
+	err = models.DB.Raw("SELECT u.name, c.content, c.updated_at FROM comments c, users u WHERE c.stream_id = ? AND c.user_id = u.id AND c.updated_at > ?", reqComment.StreamID, parsedTime).
 		Scan(&comments).Error
-    if err != nil {
-        log.Println(err)
-        c.Status(http.StatusInternalServerError)
-        return
-    }
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
 
 	c.JSON(http.StatusOK, comments)
 }
