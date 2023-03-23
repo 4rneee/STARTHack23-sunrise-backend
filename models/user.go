@@ -7,10 +7,11 @@ type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email" gorm:"unique"`
 	Password []byte `gorm:"type:BINARY(60)"`
+    Points uint
 }
 
 func (u *User) String() string {
-	return fmt.Sprintf("{%v %v %v, %v}", u.ID, u.Name, u.Email, string(u.Password))
+	return fmt.Sprintf("{%v %v %v, %v, %v}", u.ID, u.Name, u.Email, string(u.Password), u.Points)
 }
 
 type Friends struct {
