@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/4rneee/STARTHack23-sunrise-backend/models"
@@ -21,9 +22,8 @@ type RequestComment struct {
 }
 
 type CommentResult struct {
-	Name      string `json:"name" binding:"required"`
-	Content   string `json:"comment" binding:"required"`
-	UpdatedAt string `json:"timestamp" binding:"required"`
+	Name    string `json:"name" binding:"required"`
+	Content string `json:"comment" binding:"required"`
 }
 
 func PutComment(c *gin.Context) {
@@ -55,7 +55,7 @@ func GetComments(c *gin.Context) {
 		return
 	}
 
-	parsedTime, err := time.Parse(time.RFC3339, reqComment.LastPull)
+	parsedTime, err := time.Parse(time.RFC3339Nano, reqComment.LastPull)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		log.Println(err)
@@ -75,5 +75,31 @@ func GetComments(c *gin.Context) {
         comments = comments[:25]
     }
 
+	c.JSON(http.StatusOK, comments)
+}
+
+func GetLatestMesseges(c *gin.Context) {
+	id_s, ok := c.GetQuery("id")
+
+	if !ok {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(id_s)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+    var comments[]CommentResult
+    err = models.DB.Raw("SELECT u.name, c.content, c.updated_at FROM comments c, user u WHERE c.stream_id = ? AND c.user_id = u.id ORDER BY c.updated_at DESC LIMIT 25", id).Scan(&comments).Error
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
     c.JSON(http.StatusOK, comments)
 }
+
