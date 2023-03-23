@@ -1,9 +1,11 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+
+	"github.com/4rneee/STARTHack23-sunrise-backend/models"
+	"github.com/gin-gonic/gin"
 )
 
 type Comment struct {
@@ -31,7 +33,14 @@ func PutComment(c *gin.Context) {
 		return
 	}
 
-	// TODO: Add comment to Buffer / DB
+	// Add comment to Buffer / DB
+    err := models.DB.Create(&models.Comment{Content:newComment.Content, UserID:newComment.UserID, StreamID:newComment.StreamID}).Error
+    if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
 
 	c.Status(http.StatusOK)
 }
