@@ -21,5 +21,7 @@ func main() {
 
     router.GET("getStreams/", controllers.GetAllStreams)
 
+    router.PUT("putComment/", controllers.PutComment)
+
     router.Run("localhost:8080")
 }
