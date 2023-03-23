@@ -26,7 +26,7 @@ func main() {
 
     router.PUT("putComment/", controllers.PutComment)
     router.PUT("getComments/", controllers.GetComments)
-    router.GET("getLatestsMessages", controllers.GetLatestMesseges)
+    router.GET("getLatestMsgs", controllers.GetLatestMesseges)
 
     router.PUT("putClip/", controllers.PutClip)
 
