@@ -22,6 +22,7 @@ func main() {
     router.GET("getStreams/", controllers.GetAllStreams)
 
     router.PUT("putComment/", controllers.PutComment)
+    router.PUT("getComments/", controllers.GetComments)
 
     router.PUT("putClip/", controllers.PutClip)
 
