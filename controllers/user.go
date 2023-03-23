@@ -128,7 +128,7 @@ func LoginUser(c *gin.Context) {
 	}
 
 	var inDB models.User
-	err := models.DB.First(&inDB, "email = ?", strings.TrimSpace(input.Email).Error
+	err := models.DB.First(&inDB, "email = ?", strings.TrimSpace(input.Email)).Error
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		log.Println(err.Error())
