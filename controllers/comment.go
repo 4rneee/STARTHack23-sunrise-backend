@@ -71,5 +71,5 @@ func GetComments(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, comments)
+    c.JSON(http.StatusOK, comments[:25])
 }
