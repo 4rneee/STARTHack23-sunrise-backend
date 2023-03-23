@@ -8,14 +8,10 @@ type User struct {
 	Email    string `json:"email" gorm:"unique"`
 	Password []byte `gorm:"type:BINARY(60)"`
 	Points   uint
-    ViewID uint 
+	Friends  []User `gorm:"many2many:friends;association_jointable_foreignkey:friend_id"`
+	StreamID uint   
 }
 
 func (u *User) String() string {
 	return fmt.Sprintf("{%v %v %v, %v, %v}", u.ID, u.Name, u.Email, string(u.Password), u.Points)
-}
-
-type Friends struct {
-	UID1 uint `json:"uID1"`
-	UID2 uint `json:"uID2"`
 }
