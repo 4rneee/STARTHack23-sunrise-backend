@@ -71,5 +71,9 @@ func GetComments(c *gin.Context) {
 		return
 	}
 
-    c.JSON(http.StatusOK, comments[:25])
+    if len(comments) > 25 {
+        comments = comments[:25]
+    }
+
+    c.JSON(http.StatusOK, comments)
 }
