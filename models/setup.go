@@ -80,6 +80,10 @@ func AddMockStreams() {
 		{ID: 5, Name: "The blue promise", Description: "Documentation on a historic woner", Thumbnail: "https://www.evz.ch/typo3temp/assets/_processed_/4/d/csm_ff813cd10cbaa0943b4182ad4f591edd23f65050-fp-600-460-8-42_4144586341.jpg"},
 		{ID: 6, Name: "Canada - Russia", Description: "World Cup recap", Thumbnail: "https://image.stern.de/31606106/t/rR/v2/w1440/r1/-/eishockey-kanada-russland.jpg"},
 		{ID: 7, Name: "Season recap", Description: "NHL Cup 2022 recap", Thumbnail: "https://www.hockeyweb.de/index.php?rex_media_type=hw_article_image&rex_media_file=120820102.jpg"},
+        {ID: 8, Name: "Great Britain - Canada (U18)", Description: "U18 Women World Cup", Thumbnail: "https://blob.iihf.com/iihf-media/iihfmvc/media/2022/ww18ii/gallery/18c.jpg"},
+        {ID: 9, Name: "4 decades after 'Miracle'", Description: "Old school and its highlights", Thumbnail: "https://newscdn2.weigelbroadcasting.com/NI5FB-1582385302-158182-blog-200222003834-03-miracle-on-ice-reunion-restricted-exlarge-169.jpg"},
+
+
 	}
 
 	for _, stream := range mockStreams {
